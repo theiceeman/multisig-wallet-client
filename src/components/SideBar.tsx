@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import MultiSigWallet from "../utils/MultiSigWallet";
-import { truncateAddress } from "../utils/helpers";
+import MultiSigWallet from "../utils/MultiSigWallet.js";
+import { truncateAddress } from "../utils/helpers.js";
 import { useAccount } from "../context/UserContext";
 import { useFormik } from "formik";
 
@@ -8,48 +8,17 @@ const SideBar = () => {
   const account = useAccount();
   const [approvers, setApprovers] = useState([]);
 
-  const _getApprovers = new MultiSigWallet(
-    account?.provider,
-    account?.address
-  )
-
-  const fetchApprovers = async (provider: any, address: any) => {
-    _getApprovers.getApprovers();
-  console.log({_getApprovers})
-
-    try {
-      // if (account?.provider == null && account?.address == null) {
-      //   return;
-      // }
-      const approvers = await new MultiSigWallet(
-        provider,
-        address
-      ).getApprovers();
-      console.log('xxx',{ approvers });
-
-      // setApprovers(approvers);
-    } catch (error) {
-      console.log({ error });
+  const fetchApprovers = async () => {
+    if (account?.provider == null && account?.address == null) {
+      return;
     }
-  };
+    const approvers = await new MultiSigWallet(
+      account?.provider,
+      account?.address
+    ).getApprovers();
+    console.log({ approvers });
 
-  const fetchTransfers = async (provider:any,address:any) => {
-    try {
-      // if (account?.provider == null && account?.address == null) {
-      //   return;
-      // }
-      console.log('yyy',{ account });
-      const transfers = await new MultiSigWallet(
-        provider,
-        address
-      ).getTransfers();
-      console.log("dam");
-      console.log({ transfers });
-
-      // setTransfers(approvers);
-    } catch (error) {
-      console.log({ error });
-    }
+    setApprovers(approvers);
   };
 
   const formik = useFormik({
@@ -70,17 +39,9 @@ const SideBar = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (account?.provider && account?.address) {
-  //     // return;
-  //     fetchTransfers(account?.provider,account?.address);
-  //     fetchApprovers(account?.provider,account?.address);
-  //   }
-  // }, [account]);
-
-  // useEffect(() => {
-  //   fetchTransfers();
-  // }, [account?.provider]);
+  useEffect(() => {
+    fetchApprovers();
+  }, [account?.provider, account?.address]);
 
   return (
     <div className="flex flex-col gap-7 w-1/6 h-screen bg-blue-100 px-3 py-4">

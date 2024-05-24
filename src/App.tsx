@@ -14,12 +14,12 @@ function App() {
     if (account?.provider == null && account?.address == null) {
       return;
     }
-    console.log({account})
+    console.log({ account });
     const transfers = await new MultiSigWallet(
       account?.provider,
       account?.address
     ).getTransfers();
-    console.log('dam')
+    console.log("dam");
     console.log({ transfers });
 
     // setTransfers(approvers);
@@ -27,7 +27,7 @@ function App() {
 
   useEffect(() => {
     fetchTransfers();
-  }, [account?.address]);
+  }, [account?.provider, account?.address]);
   return (
     <>
       <div className="font-muli">
