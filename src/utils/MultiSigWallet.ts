@@ -22,7 +22,6 @@ class MultiSigWallet {
     }
 
     async getTransfers() {
-        
         return await this.contract.methods.getTransfers().call();
     }
 

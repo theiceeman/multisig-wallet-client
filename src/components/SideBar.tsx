@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import MultiSigWallet from "../utils/MultiSigWallet.js";
-import { truncateAddress } from "../utils/helpers.js";
 import { useAccount } from "../context/UserContext";
 import { useFormik } from "formik";
 
-const SideBar = () => {
+const SideBar = ({ fetchTransfers }: { fetchTransfers: any }) => {
   const account = useAccount();
   const [approvers, setApprovers] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
 
   const fetchApprovers = async () => {
-    if (account?.provider == null && account?.address == null) {
-      return;
-    }
-    const approvers = await new MultiSigWallet(
-      account?.provider,
-      account?.address
-    ).getApprovers();
-    console.log({ approvers });
+    try {
+      if (!account?.provider || !account?.address) {
+        return;
+      }
 
-    setApprovers(approvers);
+      const approvers = await new MultiSigWallet(
+        account?.provider,
+        account?.address
+      ).getApprovers();
+
+      setApprovers(approvers);
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   const formik = useFormik({
@@ -27,15 +31,13 @@ const SideBar = () => {
       amount: "",
     },
     onSubmit: async (values) => {
-      console.log({ ...values });
-
-      const transfer = await new MultiSigWallet(
+      await new MultiSigWallet(
         account?.provider,
         account?.address
       ).createTransfer(String(values.amount), values.to);
-      // console.log({ transfer });
-      // mutateCreateCurrency({ ...values });
-      // formik.resetForm()
+
+      setisLoading(false);
+      fetchTransfers();
     },
   });
 
@@ -71,11 +73,9 @@ const SideBar = () => {
           />
           <button
             onClick={() => formik.handleSubmit()}
-            // isLoading={isLoadingCreateCurrency}
-            // disabled={isLoadingCreateCurrency}
             className="text-nowrap rounded-lg mt-6 w-full py-3 text-[16px]/[20px] text-white capitalize bg-blue-400"
           >
-            Send
+            {isLoading ? "processing..." : "Send"}
           </button>
         </div>
       </div>
@@ -89,7 +89,6 @@ const SideBar = () => {
                 key={i}
                 className="flex flex-col w-full overflow-auto mt-3 rounded-sm px-3 py-1 text-xs text-black border-b break-words break-all"
               >
-                {/* {truncateAddress(e, 12)} */}
                 {e}
               </div>
             ))}
