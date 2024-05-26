@@ -1,8 +1,27 @@
-# React + Vite
+# MultiSig Wallet
+Tutorial on building a multi-signature crypto wallet, running on Asset Chain.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔨 Setup
+Follow the steps below to setup the React Project.
+```bash
+# fork and clone the forked project
+$ git clone [REPO_URL]
 
-Currently, two official plugins are available:
+# Access the folder
+$ cd multisig-wallet
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Install dependencies
+$ yarn install
+
+# Run app
+$ yarn dev
+```
+
+## Technologies
+Typescript
+ReactJS
+
+## 📝 License
+This project is under license from MIT. For more details, see the LICENSE file.
+
+With :heart:, <a href="https://github.com/theiceeman" target="_blank">KelvinIOT</a>
